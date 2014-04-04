@@ -1,0 +1,11 @@
+# Please read /usr/share/doc/initscripts-*/sysconfig.txt
+# for the documentation of these parameters.
+DEVICE=eth0
+BOOTPROTO=static
+TYPE=Ethernet
+HWADDR=MAC_ADDRESS_GOES_HERE
+IPADDR=IP_ADDRESS_GOES_HERE
+NETMASK=255.255.255.0
+ONBOOT=yes
+NM_CONTROLLED=no
+PEERDNS=yes
