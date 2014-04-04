@@ -5,10 +5,20 @@ Things to note:
 - recommend using qcow2 images for quick creation and cloning
 
 
-##Install KVM##
+##Install KVM and Prerequisites##
+Install virtualization packages with the following:
+
 ```bash
 $ yum install @virtualization python-lxml
 ```
+Also, install the python netaddr module 7.11+. 
+- Download the zip file: http://github.com/drkjam/netaddr/
+- extract somewhere temporary
+- cd into the root directory (netaddr-x.x.x/)
+- run 'sudo python setup.py install'
+- See https://netaddr.readthedocs.org/en/latest/index.html if you have trouble.
+
+> NOTE: There is a netaddr package in yum (python-netaddr), but at the time of this README doc it contains a version with a bug that prevents our scripts from running. This bug was fixed in version 7.11 so just make sure you are running at least that version.
 
 ##Create Base Image##
 Use the virt-manager to create a base install from an ISO, using all default options except:
