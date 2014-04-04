@@ -28,8 +28,13 @@ $ sed '/^root.*/a some-user ALL=(ALL)       NOPASSWD: ALL' /etc/sudoers
 Push Public Key to that User
 
 ##Run Script##
+Pull down the script.
 ```bash
-### DO Not Run As root ###
 $ git clone git@github.com:etsauer/virtual-lab.git
-$ 
 ```
+
+Generate list of IPs/hosts
+```$ generate-ips.sh > tmp/ips.txt```
+
+Clone your base image into a new vm, based on names from tmp/ips.txt
+```$ time clone.sh vm111```
