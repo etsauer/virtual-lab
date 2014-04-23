@@ -32,7 +32,8 @@ python ./modify-domain.py \
 sudo virsh define tmp/$VM.xml
 sudo virsh dumpxml $VM
  
-ip=`egrep "^$VM\s" tmp/ips.txt | awk '{print $2}'`; echo "Using IP Address: $ip" | tee $LOG
+#ip=`egrep "^$VM\s" tmp/ips.txt | awk '{print $2}'`; echo "Using IP Address: $ip" | tee $LOG
+ip=`python ./manage-network.py < tmp/base-vm.xml`
 sed -e "s/IP_ADDRESS_GOES_HERE/$ip/g" -e "s/VM_NAME_GOES_HERE/$VM/g" < templates/hosts > tmp/hosts.$VM
 sed -e "s/IP_ADDRESS_GOES_HERE/$ip/g" -e "s/VM_NAME_GOES_HERE/$VM/g" -e "s/MAC_ADDRESS_GOES_HERE/$mac/g" < templates/ifcfg-eth0 > tmp/ifcfg-eth0.$VM
 sed -e "s/IP_ADDRESS_GOES_HERE/$ip/g" -e "s/VM_NAME_GOES_HERE/$VM/g" -e "s/MAC_ADDRESS_GOES_HERE/$mac/g" < templates/network > tmp/network.$VM

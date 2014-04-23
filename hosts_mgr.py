@@ -24,20 +24,11 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import re, sys, uuid, subprocess, os
+import re, uuid, subprocess, os
 from lxml import etree
-from optparse import OptionParser
 from netaddr import *
 
 IP_ADDRESS_MATCH='(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
-
-### Possibly not needed?
-parser = OptionParser()
-parser.add_option("--name")
-#parser.add_option("--new-uuid", action="store_true")
-#parser.add_option("--device-path")
-#parser.add_option("--mac-address")
-(options, args) = parser.parse_args()
 
 ### Functions ###
 # get_ips_available -- navigates virsh's net-xml tree for given network_name and grabs the network's address, and dhcp range. 
@@ -53,7 +44,7 @@ def get_ips_available(network_name):
 	end = range_el.get('end')
 
 	network = IPNetwork(network_address + "/24")
-	print "Network: " + str(network)
+	#print "Network: " + str(network)
 	dhcp_range = IPRange(start, end)
 
 	available_set = IPSet(network.iter_hosts())
@@ -85,25 +76,13 @@ def get_next_available(network_name):
 
 def register_next_ip(network_name, vm_name):
 	ip = get_next_available(network_name)
+	#print "Registering IP: %s for VM '%s'" % (ip,vm_name)
+	# Right now using an external bash script to do the file writes. Could change this later.
 	message = os.system("./ip.sh add %s %s" % (ip,vm_name))
-	print "Registering IP: %s" % ip
-	return message == 0, message
+	return ip, message == 0, message
 
-def deregister_ip(network_name, ip):
-	
-	return False
-
-domain_tree = etree.parse(sys.stdin)
-    
-network_name = get_network_name(domain_tree)
-
-#ips = get_ips_available(network_name)
-#next_ip = get_next_available(network_name)
-result, message = register_next_ip (network_name, options.name)
-if result is False:
-	print "There was an error. \n" + message
-else:
-	print "Success!"
-
-#print("Available IPs: " + str(ips))
-#print("Next Available: " + str(next_ip))
+def deregister_ip(vm_name, ip):
+	#print "Deregstering IP: %s for VM '%s'" % (ip,vm_name)
+	# Right now using an external bash script to do the file writes. Could change this later.
+	message = os.system("./ip.sh remove %s %s" % (ip,vm_name))
+	return ip, message == 0, message
