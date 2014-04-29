@@ -20,16 +20,18 @@ network_name = hosts_mgr.get_network_name(domain_tree)
 #next_ip = get_next_available(network_name)
 ip, result, message = hosts_mgr.register_next_ip (network_name, options.name)
 if result is False:
-	print "There was an error. \n" + message
+	print "There was an error. %d" % message
+	sys.exit()
 else:
-	print "Success!"
+	#print "Success!"
 
-	ip, result, message = hosts_mgr.deregister_ip (options.name, ip)
-	if result is False:
-		print "There was an error. \n" + message
-	else:
-		print "Success!"
-
-print ip
+	#ip, result, message = hosts_mgr.deregister_ip (options.name, ip)
+	#if result is False:
+	#	print "There was an error. \n" + message
+	#	sys.exit()
+	#else:
+		#print "Success!"
+	print "Result: %s Message: %s" % (result, message)
+	print ip
 #print("Available IPs: " + str(ips))
 #print("Next Available: " + str(next_ip))

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 is_available() {
-	IP="$1"
-	VM="$2"
-	if [[ $(grep -c "$IP" /etc/hosts) == 0 ]]; then
+	VM="$1"
+	IP="$2"
+	if [[ $(($(grep -c "$IP" /etc/hosts) + $(grep -c "$VM" /etc/hosts))) == 0 ]]; then
 		echo "true";
 	else
 		echo "false";
@@ -13,10 +13,12 @@ is_available() {
 add() {
 	VM="$1"
 	IP="$2"
-	if [[ $(is_available $IP) == "true" ]]; then
-		echo "$IP    $VM" | sudo tee -a /etc/hosts
+	if [[ $(is_available $VM $IP) == "true" ]]; then
+		echo "$IP    $VM" | sudo tee -a /etc/hosts > /dev/null
+		echo "true"
 	else
 		echo "IP: $IP is already taken"
+		exit -1
 	fi
 }
 
@@ -37,6 +39,6 @@ VM=$3
 case $ACTION in
 	add) add $VM $IP ;;
 	remove) remove $VM $IP ;;
-	is_available) is_available $IP ;;
+	is_available) is_available $VM $IP ;;
 	*) usage ;;
 esac
