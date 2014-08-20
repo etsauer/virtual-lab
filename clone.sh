@@ -22,7 +22,10 @@ sudo qemu-img create -f qcow2 -b $BASE_IMAGE $IMAGES_HOME/$VM.qcow2 >> $LOG
 # Define VM
 mkdir -p tmp
 sudo virsh dumpxml base-vm > tmp/base-vm.xml
-mac=`egrep "^$VM"'\s' tmp/ips.txt | awk '{print $3}'`; echo "Using Mac Address: $mac" | tee $LOG
+network_info=$(python ./get-ip.py --name $VM < tmp/${BASE_NAME}.xml)
+IFS=',' read -ra net_array <<< "$network_info"
+mac=${net_array[1]}
+#mac=`egrep "^$VM"'\s' tmp/ips.txt | awk '{print $3}'`; echo "Using Mac Address: $mac" | tee $LOG
 python ./modify-domain.py \
     --name $VM \
     --new-uuid \
@@ -33,7 +36,7 @@ sudo virsh define tmp/$VM.xml
 sudo virsh dumpxml $VM
  
 #ip=`egrep "^$VM\s" tmp/ips.txt | awk '{print $2}'`; echo "Using IP Address: $ip" | tee $LOG
-ip=`python ./manage-network.py < tmp/base-vm.xml`
+ip=${net_array[0]}
 sed -e "s/IP_ADDRESS_GOES_HERE/$ip/g" -e "s/VM_NAME_GOES_HERE/$VM/g" < templates/hosts > tmp/hosts.$VM
 sed -e "s/IP_ADDRESS_GOES_HERE/$ip/g" -e "s/VM_NAME_GOES_HERE/$VM/g" -e "s/MAC_ADDRESS_GOES_HERE/$mac/g" < templates/ifcfg-eth0 > tmp/ifcfg-eth0.$VM
 sed -e "s/IP_ADDRESS_GOES_HERE/$ip/g" -e "s/VM_NAME_GOES_HERE/$VM/g" -e "s/MAC_ADDRESS_GOES_HERE/$mac/g" < templates/network > tmp/network.$VM

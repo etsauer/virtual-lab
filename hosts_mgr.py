@@ -24,7 +24,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import re, uuid, subprocess, os
+import re, uuid, subprocess, os, random
 from lxml import etree
 from netaddr import *
 
@@ -86,3 +86,10 @@ def deregister_ip(vm_name, ip):
 	# Right now using an external bash script to do the file writes. Could change this later.
 	message = os.system("./ip.sh remove %s %s" % (ip,vm_name))
 	return ip, message == 0, message
+
+def get_random_MAC():
+	mac = [ 0x00, 0x16, 0x3e,
+		random.randint(0x00, 0x7f),
+		random.randint(0x00, 0xff),
+		random.randint(0x00, 0xff) ]
+	return ':'.join(map(lambda x: "%02x" % x, mac))

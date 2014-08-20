@@ -15,7 +15,7 @@ add() {
 	IP="$2"
 	if [[ $(is_available $VM $IP) == "true" ]]; then
 		echo "$IP    $VM" | sudo tee -a /etc/hosts > /dev/null
-		echo "true"
+#		echo "true"
 	else
 		echo "IP: $IP is already taken"
 		exit -1

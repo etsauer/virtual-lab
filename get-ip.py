@@ -19,6 +19,7 @@ network_name = hosts_mgr.get_network_name(domain_tree)
 #ips = get_ips_available(network_name)
 #next_ip = get_next_available(network_name)
 ip, result, message = hosts_mgr.register_next_ip (network_name, options.name)
+mac = hosts_mgr.get_random_MAC()
 if result is False:
 	print "There was an error. %d" % message
 	sys.exit()
@@ -31,7 +32,7 @@ else:
 	#	sys.exit()
 	#else:
 		#print "Success!"
-	print "Result: %s Message: %s" % (result, message)
-	print ip
+	#print "Result: %s Message: %s" % (result, message)
+	print "%s,%s" % (ip,mac)
 #print("Available IPs: " + str(ips))
 #print("Next Available: " + str(next_ip))
