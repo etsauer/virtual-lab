@@ -11,3 +11,4 @@ fi
 
 sudo virsh undefine $VM
 sudo rm $IMAGES_HOME/$VM.qcow2
+./ip.sh remove $VM
