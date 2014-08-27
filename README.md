@@ -46,7 +46,7 @@ $ git clone [git-url]
 The file './config/env.conf' contains default values regarding your kvm environment. Adjust these values according to your needs
 
 ###(Optional) Place additional files###
-Any files placed in './tmp/'
+Any files placed in './tmp/files.[name of vm]/' will be placed in '/tmp' on you new vm.
 
 ###Run Script###
 ```bash
