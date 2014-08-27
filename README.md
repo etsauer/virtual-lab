@@ -5,12 +5,22 @@ Things to note:
 - recommend using qcow2 images for quick creation and cloning
 
 
-##Install KVM##
+###Install KVM and Prerequisites###
+Install virtualization packages with the following:
+
 ```bash
 $ yum install @virtualization python-lxml
 ```
+Also, install the python netaddr module 7.11+. 
+- Download the zip file: http://github.com/drkjam/netaddr/
+- extract somewhere temporary
+- cd into the root directory (netaddr-x.x.x/)
+- run 'sudo python setup.py install'
+- See https://netaddr.readthedocs.org/en/latest/index.html if you have trouble.
 
-##Create Base Image##
+> NOTE: There is a netaddr package in yum (python-netaddr), but at the time of this README doc it contains a version with a bug that prevents our scripts from running. This bug was fixed in version 7.11 so just make sure you are running at least that version.
+
+###Create Base Image###
 Use the virt-manager to create a base install from an ISO, using all default options except:
 - 8 gb disk, use virtio type
 - Hypervisor/Virt Type: kvm
@@ -23,18 +33,23 @@ Once installed and booted, log in as root and do the following:
 
 ```bash
 $ useradd -d /home/vm-user vm-user
-$ sed '/^root.*/a some-user ALL=(ALL)       NOPASSWD: ALL' /etc/sudoers
+$ sed '/^root.*/a vm-user ALL=(ALL)       NOPASSWD: ALL' /etc/sudoers
 ```
 Push Public Key to that User
 
-##Run Script##
-Pull down the script.
+###Clone Repo###
 ```bash
-$ git clone git@github.com:etsauer/virtual-lab.git
+$ git clone [git-url]
 ```
 
-Generate list of IPs/hosts
-```$ generate-ips.sh > tmp/ips.txt```
+###(Optional) Configure Environment###
+The file './config/env.conf' contains default values regarding your kvm environment. Adjust these values according to your needs
 
-Clone your base image into a new vm, based on names from tmp/ips.txt
-```$ time clone.sh vm111```
+###(Optional) Place additional files###
+Any files placed in './tmp/files.[name of vm]/' will be placed in '/tmp' on you new vm.
+
+###Run Script###
+```bash
+### DO Not Run As root ###
+$ ./clone mynewvm
+```
