@@ -35,15 +35,27 @@ Once installed and booted, log in as root and do the following:
 $ useradd -d /home/vm-user vm-user
 $ sed '/^root.*/a vm-user ALL=(ALL)       NOPASSWD: ALL' /etc/sudoers
 ```
-Push Public Key to that User
+
+Push your public Key to that user in order to set up ssh key authentication to the VM (so we don't need to mess with passwords).
+
+Create a Read-only image from your base vm
+```bash
+$ sudo qemu-img create -f qcow2 -b /path/to/base-vm.qcow2 /path/to/base-vm-readonly.qcow2
+```
+
+
 
 ###Clone Repo###
 ```bash
 $ git clone [git-url]
 ```
 
-###(Optional) Configure Environment###
-The file './config/env.conf' contains default values regarding your kvm environment. Adjust these values according to your needs
+###Configure Environment###
+The file './config/env.conf' contains default values regarding your kvm environment. Adjust these values according to your needs.
+
+1. Ensure BASE_NAME matches the name of the vm you created.
+2. Make sure BASE_IMAGE_DIR and BASE_IMAGE point to your 'readonly' qcow2 image
+3. IMAGES_HOME sets the location that new VM images will be placed
 
 ###(Optional) Place additional files###
 Any files placed in './tmp/files.[name of vm]/' will be placed in '/tmp' on you new vm.
